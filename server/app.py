@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from flask_restful import Api, Resource
 
 from models import db, Plant
+import ipdb
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///plants.db'
@@ -46,9 +47,29 @@ class PlantByID(Resource):
     def get(self, id):
         plant = Plant.query.filter_by(id=id).first().to_dict()
         return make_response(jsonify(plant), 200)
+    
+    def patch(self,id):
+        record = Plant.query.get(id)
 
+        if request.form['is_in_stock'] == 'true':
+            setattr(record,'is_in_stock',True)
+        elif request.form['is_in_stock'] == 'false':
+            setattr(record,'is_in_stock',False)
+
+        # for attr in request.form:
+        #     setattr(record,attr,request.form[attr])
+
+        db.session.add(record)
+        db.session.commit()
+
+        response_dict = record.to_dict()
+
+        response = make_response(response_dict, 200)
+        return response
 
 api.add_resource(PlantByID, '/plants/<int:id>')
+
+    
 
 
 if __name__ == '__main__':
