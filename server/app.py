@@ -51,9 +51,9 @@ class PlantByID(Resource):
     def patch(self,id):
         record = Plant.query.get(id)
 
-        if request.form['is_in_stock'] == 'true':
+        if request.form['is_in_stock'] == 'true' or request.form['is_in_stock'] == True:
             setattr(record,'is_in_stock',True)
-        elif request.form['is_in_stock'] == 'false':
+        elif request.form['is_in_stock'] == 'false'or request.form['is_in_stock'] == False:
             setattr(record,'is_in_stock',False)
 
         # for attr in request.form:
@@ -63,8 +63,18 @@ class PlantByID(Resource):
         db.session.commit()
 
         response_dict = record.to_dict()
+        ipdb.set_trace()
 
         response = make_response(response_dict, 200)
+        return response
+    
+    def delete(self,id):
+        record = Plant.query.get(id)
+
+        db.session.delete(record)
+        db.session.commit()
+
+        response = make_response('', 204)
         return response
 
 api.add_resource(PlantByID, '/plants/<int:id>')
