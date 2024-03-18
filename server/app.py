@@ -51,19 +51,24 @@ class PlantByID(Resource):
     def patch(self,id):
         record = Plant.query.get(id)
 
-        if request.form['is_in_stock'] == 'true' or request.form['is_in_stock'] == True:
-            setattr(record,'is_in_stock',True)
-        elif request.form['is_in_stock'] == 'false'or request.form['is_in_stock'] == False:
-            setattr(record,'is_in_stock',False)
+        # if request.json['is_in_stock'] == 'true' or request.json['is_in_stock'] == True:
+        #     setattr(record,'is_in_stock',True)
+        # elif request.json['is_in_stock'] == 'false'or request.json['is_in_stock'] == False:
+        #     setattr(record,'is_in_stock',False)
 
-        # for attr in request.form:
-        #     setattr(record,attr,request.form[attr])
+        # if request.json['is_in_stock'] == 'true' or request.json['is_in_stock'] == True:
+        #     setattr(record,'is_in_stock',True)
+        # elif request.json['is_in_stock'] == 'false'or request.json['is_in_stock'] == False:
+        #     setattr(record,'is_in_stock',False)
 
-        db.session.add(record)
+        for attr in request.json:
+            setattr(record,attr,request.json[attr])
+
+        
         db.session.commit()
 
         response_dict = record.to_dict()
-        ipdb.set_trace()
+        # ipdb.set_trace()
 
         response = make_response(response_dict, 200)
         return response
