@@ -51,16 +51,6 @@ class PlantByID(Resource):
     def patch(self,id):
         record = Plant.query.get(id)
 
-        # if request.json['is_in_stock'] == 'true' or request.json['is_in_stock'] == True:
-        #     setattr(record,'is_in_stock',True)
-        # elif request.json['is_in_stock'] == 'false'or request.json['is_in_stock'] == False:
-        #     setattr(record,'is_in_stock',False)
-
-        # if request.json['is_in_stock'] == 'true' or request.json['is_in_stock'] == True:
-        #     setattr(record,'is_in_stock',True)
-        # elif request.json['is_in_stock'] == 'false'or request.json['is_in_stock'] == False:
-        #     setattr(record,'is_in_stock',False)
-
         for attr in request.json:
             setattr(record,attr,request.json[attr])
 
